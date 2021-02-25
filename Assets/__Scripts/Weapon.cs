@@ -140,17 +140,18 @@ public class Weapon : MonoBehaviour {
                 break;
 
             case WeaponType.phaser:
-                p = MakeProjectile(); // Make right Projectile
-                p.transform.rotation = Quaternion.AngleAxis(1, Vector3.back);
-                p.rigid.velocity = p.transform.rotation * vel;
-                p = MakeProjectile(); // Make left Projectile
-                p.transform.rotation = Quaternion.AngleAxis(-1, Vector3.back);
-                p.rigid.velocity = p.transform.rotation * vel;
+                p = MakeProjectile();
+                float waveFrequency = 2;
+                float waveWidth = 4;
+                float waveShake = Time.time;
+                float theta = 2 * Mathf.PI * waveShake / waveFrequency;
+                float wave = Mathf.Sin(theta);
+                Vector3 waveVel = vel;
+                waveVel.x = vel.x + waveWidth * wave;
+                p.rigid.velocity = waveVel;
                 break;
 
             case WeaponType.laser:
-                p = MakeProjectile();
-                p.rigid.velocity = vel;
                 break;
         }
     }

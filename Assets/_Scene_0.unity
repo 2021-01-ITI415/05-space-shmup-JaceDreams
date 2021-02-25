@@ -402,7 +402,7 @@ MonoBehaviour:
     projectileColor: {r: 0.5137255, g: 0.24313727, b: 0.9333334, a: 1}
     damageOnHit: 1
     continuousDamage: 0
-    delayBetweenShots: 0.9
+    delayBetweenShots: 0.5
     velocity: 50
   - type: 5
     letter: L
