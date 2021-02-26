@@ -19,6 +19,7 @@ public class Main : MonoBehaviour {
         WeaponType.blaster, WeaponType.blaster, WeaponType.spread, WeaponType.shield, WeaponType.phaser, WeaponType.laser
     };
 
+
     private BoundsCheck bndCheck;
 
     public void ShipDestroyed( Enemy e)
