@@ -2,61 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Enemy_5 extends the Enemy class
 public class Enemy_5 : Enemy {
 
-    [Header("Set in Inspector: Enemy_5")]
-    // Determines how much the sine wave will affect movement
-    public float sinEccentricity = 0.6f;
-    public float lifeTime = 10;
+    [Header("Set in Inspector: Enemy_1")]
+    // # seconds for a full sine wave
+    public float waveFrequency = 2;
+    // sine wave width in meters
+    public float waveWidth = 4;
+    public float waveRotY = 45;
 
-    [Header("Set Dynamically: Enemy_5")]
-    // Enemy_2 uses a Sin wave to modify a 2-point linear interpolation
-    public Vector3 p0;
-    public Vector3 p1;
-    public float birthTime;
+    private float x0; // The initial x value of pos
+    private float birthTime;
 
-    private void Start()
+    // Use this for initialization
+    void Start()
     {
-        // Pick any point on the left side of the screen
-        p0 = Vector3.zero;
-        p0.x = -bndCheck.camWidth - bndCheck.radius;
-        p0.y = Random.Range(-bndCheck.camHeight, bndCheck.camHeight);
+        // Set x0 to the initial x position of Enemy_1
+        x0 = pos.x;
 
-        // Pick any point on the right side of the screen
-        p1 = Vector3.zero;
-        p1.x = bndCheck.camWidth + bndCheck.radius;
-        p1.y = Random.Range(-bndCheck.camHeight, bndCheck.camHeight);
-
-        // Possibly swap sides
-        if (Random.value > 0.5f)
-        {
-            // Setting the .x of each point to its negative will move it to
-            // the other side of the screen
-            p0.x *= -1;
-            p1.x *= -1;
-        }
-
-        // Set the birthTime to the current time
         birthTime = Time.time;
     }
 
+    // Override the Move function on Enemy
     public override void Move()
     {
-        // Bezier curves work based on a u value between 0 & 1
-        float u = (Time.time - birthTime) / lifeTime;
+        Vector3 tempPos = pos;
 
-        // If u>1, then it has been longer than lifeTime since birthTime
-        if (u > 1)
-        {
-            // This Enemy_5 has finished its life
-            Destroy(this.gameObject);
-            return;
-        }
+        float age = Time.time - birthTime;
+        float theta = Mathf.PI * 2 * age / waveFrequency;
+        float sin = Mathf.Sin(theta);
+        tempPos.x = x0 + waveWidth * sin;
+        pos = tempPos;
 
-        // Adjust u by adding a U Curve based on a Sine wave
-        u = u + sinEccentricity * (Mathf.Sin(u * Mathf.PI * 2));
+        //rotate a bit about y
+        Vector3 rot = new Vector3(0, sin * waveRotY, 0);
+        this.transform.rotation = Quaternion.Euler(rot);
 
-        // Interpolate the two linear interpolation points
-        pos = ((1 - u) * p0) + (u * p1);
+        // base.Move() still handles the movement down in y
+        base.Move();
+
+        // print (bndCheck.isOnScreen);
     }
 }
