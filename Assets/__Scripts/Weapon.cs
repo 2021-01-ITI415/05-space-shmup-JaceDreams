@@ -155,6 +155,8 @@ public class Weapon : MonoBehaviour {
                 break;
 
             case WeaponType.laser:
+                p = MakeProjectile();
+                p.rigid.velocity = vel;
                 break;
         }
     }
