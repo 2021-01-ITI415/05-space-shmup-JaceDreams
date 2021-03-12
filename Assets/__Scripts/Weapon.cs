@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime;
+using System.Security.Cryptography;
 using UnityEngine;
 
 /// <summary>
@@ -128,9 +131,32 @@ public class Weapon : MonoBehaviour {
                 p = MakeProjectile(); // Make right Projectile
                 p.transform.rotation = Quaternion.AngleAxis(10, Vector3.back);
                 p.rigid.velocity = p.transform.rotation * vel;
+                p = MakeProjectile(); // Make middle-right Projectile
+                p.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
+                p.rigid.velocity = p.transform.rotation * vel;
                 p = MakeProjectile(); // Make left Projectile
                 p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
                 p.rigid.velocity = p.transform.rotation * vel;
+                p = MakeProjectile(); // Make middle-left Projectile
+                p.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
+                p.rigid.velocity = p.transform.rotation * vel;
+                break;
+
+            case WeaponType.phaser:
+                p = MakeProjectile();
+                float waveFrequency = 2;
+                float waveWidth = 4;
+                float waveShake = Time.time;
+                float theta = 2 * Mathf.PI * waveShake / waveFrequency;
+                float wave = Mathf.Sin(theta);
+                Vector3 waveVel = vel;
+                waveVel.x = vel.x + waveWidth * wave;
+                p.rigid.velocity = waveVel;
+                break;
+
+            case WeaponType.laser:
+                p = MakeProjectile();
+                p.rigid.velocity = vel;
                 break;
         }
     }
